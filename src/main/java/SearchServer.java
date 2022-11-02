@@ -1,0 +1,43 @@
+import com.google.gson.Gson;
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.List;
+
+/**
+ * @author Aleksey Anikeev aka AgentChe
+ * Date of creation: 01.11.2022
+ */
+public class SearchServer {
+    private final int port;
+    private final BooleanSearchEngine engine;
+
+    public SearchServer(int port) throws IOException {
+        this.port = port;
+        this.engine = new BooleanSearchEngine(new File("pdfs"));
+    }
+
+    public void start() {
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            System.out.println("Starting server at " + port + "...");
+            while (true) {
+                try (Socket clientSocket = serverSocket.accept();
+                     PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))
+                ) {
+                    Request request = new Gson().fromJson(in.readLine(), Request.class);
+                    if (request.getWord().length() == 0) {
+                        throw new IllegalStateException("Не корректный ввод данных");
+                    }
+                    Gson gson = new Gson();
+                    List<PageEntry> result = engine.search(request.getWord());
+                    out.println(gson.toJson(result));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Не могу стартовать сервер");
+            e.printStackTrace();
+        }
+    }
+}
