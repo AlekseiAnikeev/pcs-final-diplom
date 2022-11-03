@@ -26,12 +26,12 @@ public class SearchServer {
                      PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                      BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))
                 ) {
-                    Request request = new Gson().fromJson(in.readLine(), Request.class);
-                    if (request.getWord().length() == 0) {
+                    String word = in.readLine();
+                    if (word.length() == 0) {
                         throw new IllegalStateException("Не корректный ввод данных");
                     }
                     Gson gson = new Gson();
-                    List<PageEntry> result = engine.search(request.getWord());
+                    List<PageEntry> result = engine.search(word);
                     out.println(gson.toJson(result));
                 }
             }
