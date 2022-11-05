@@ -17,7 +17,7 @@ public class Client {
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))
         ) {
-            out.println("бизнес");
+            out.println("контроля DevOps");
             System.out.println(in.readLine());
         }
     }

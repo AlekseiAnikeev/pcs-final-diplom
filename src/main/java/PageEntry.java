@@ -13,6 +13,14 @@ public class PageEntry implements Comparable<PageEntry> {
         return pdfName;
     }
 
+    public int getPage() {
+        return page;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
     @Override
     public int compareTo(PageEntry o) {
         if (count < o.count) {
