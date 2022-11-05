@@ -57,18 +57,18 @@ public class BooleanSearchEngine implements SearchEngine {
     public List<PageEntry> search(String word) {
         List<PageEntry> tempList = new ArrayList<>();
         List<PageEntry> result = new ArrayList<>();
-        String[] test = word.split("\\P{IsAlphabetic}+");
-        for (String tests : test) {
-            if (words.get(tests.toLowerCase()) != null) {
-                tempList.addAll(words.get(tests.toLowerCase()));
+        String[] request = word.split("\\P{IsAlphabetic}+");
+        for (String newRequest : request) {
+            if (words.get(newRequest.toLowerCase()) != null) {
+                tempList.addAll(words.get(newRequest.toLowerCase()));
             }
         }
-        Map<String, Map<Integer, Integer>> map = new HashMap<>();
+        Map<String, Map<Integer, Integer>> pageNumberAndCounter = new HashMap<>();
         for (PageEntry pageEntry : tempList) {
-            map.computeIfAbsent(pageEntry.getPdfName(), key -> new HashMap<>()).merge(pageEntry.getPage(), pageEntry.getCount(), Integer::sum);
+            pageNumberAndCounter.computeIfAbsent(pageEntry.getPdfName(), key -> new HashMap<>()).merge(pageEntry.getPage(), pageEntry.getCount(), Integer::sum);
         }
 
-        map.forEach((key, value) -> {
+        pageNumberAndCounter.forEach((key, value) -> {
             for (var tempPage : value.entrySet()) {
                 result.add(new PageEntry(key, tempPage.getKey(), tempPage.getValue()));
             }
