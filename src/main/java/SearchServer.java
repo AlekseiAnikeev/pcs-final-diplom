@@ -13,9 +13,9 @@ public class SearchServer {
     private final int port;
     private final BooleanSearchEngine engine;
 
-    public SearchServer(int port) throws IOException {
+    public SearchServer(int port, String PATH_PDF_FILE) throws IOException {
         this.port = port;
-        this.engine = new BooleanSearchEngine(new File("pdfs"));
+        this.engine = new BooleanSearchEngine(new File(PATH_PDF_FILE));
     }
 
     public void start() {
